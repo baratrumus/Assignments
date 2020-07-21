@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Departments.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">assignments_for_test</a> &gt; <a href="index.source.html" class="el_package">departments</a> &gt; <span class="el_source">Departments.java</span></div><h1>Departments.java</h1><pre class="source lang-java linenums">package departments;
+
+import java.util.*;
+
+/*
+В организации было решено ввести справочник подразделений. Коды подразделений представлены в виде массива строк вида:
+“K1\SK1” “K1\SK2” “K1\SK1\SSK1” “K1\SK1\SSK2” “K2” “K2\SK1\SSK1” “K2\SK1\SSK2”
+, где каждая строка имеет следующую структуру: каждая строка включает в себя код данного подразделения,
+а также все коды подразделений, которые включают в свою структуру данное подразделение
+(к примеру департамент K1 включает в себя службу SK1, включающую в себя отдел SSK1). Подразделения в одной строке
+разделены знаком “\”. Возможны случаи, когда в массиве отсутствуют строки с кодом верхнеуровнего подразделения
+(в показанном выше массиве есть строки с подразделением K1, но данный код подразделения не представлен
+ отдельной строкой “K1”, аналогичный случай с кодом K2\SK1), в таком случае необходимо добавить строку с кодом
+  данного подразделения и учитывать ее при сортировке.
+Реализовать возможность сортировки массива кодов подразделений по возрастанию и убыванию, при которых
+сохранялась бы иерархическая структура (показано далее в примерах сортировки), т.к. отсортированный массив
+используется для отображения категорий пользователю. Отсортированный тестовый массив должен иметь вид:
+Сортировка по возрастанию:
+“K1”
+“K1\SK1”
+“K1\SK1\SSK1”
+“K1\SK1\SSK2”
+“K1\SK2”
+“K2”
+“K2\SK1”
+“K2\SK1\SSK1”
+“K2\SK1\SSK2”
+ */
+
+<span class="fc" id="L30">public class Departments {</span>
+
+    public static final class Org implements Comparable&lt;Org&gt; {
+        private final List&lt;String&gt; deps;
+
+<span class="fc" id="L35">        public Org(List&lt;String&gt; deps) {</span>
+<span class="fc" id="L36">            this.deps = deps;</span>
+<span class="fc" id="L37">        }</span>
+
+        @Override
+        public int compareTo(Org o) {
+<span class="fc" id="L41">            int result = 0;</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">            int size = (this.deps.size() &gt; o.deps.size()) ? o.deps.size() : this.deps.size(); //берем меньший размер</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">            for (int i = 0; i &lt; size; i++) {</span>
+<span class="fc" id="L44">                 result = this.deps.get(i).compareTo(o.deps.get(i));</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">                 if (result != 0) {</span>
+<span class="fc" id="L46">                     break;</span>
+                 }
+            }
+<span class="fc" id="L49">            return result;</span>
+        }
+
+        @Override
+        public boolean equals(Object o) {
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">            if (this == o) {</span>
+<span class="nc" id="L55">                return true;</span>
+            }
+<span class="pc bpc" id="L57" title="2 of 4 branches missed.">            if (o == null || getClass() != o.getClass()) {</span>
+<span class="nc" id="L58">                return false;</span>
+            }
+<span class="fc" id="L60">            Org org = (Org) o;</span>
+<span class="fc" id="L61">            return Objects.equals(this.deps, org.deps);</span>
+        }
+
+        @Override
+        public int hashCode() {
+<span class="nc" id="L66">            return Objects.hash(deps);</span>
+        }
+
+        @Override
+        public String toString() {
+<span class="nc" id="L71">            return deps.toString();</span>
+        }
+    }
+
+    public List&lt;Org&gt; convert(List&lt;String&gt; depsList) {
+<span class="fc" id="L76">        List&lt;Departments.Org&gt; result = new ArrayList&lt;&gt;();</span>
+        Departments.Org tmpOrg;
+        String[] strArr;
+<span class="fc" id="L79">        List&lt;String&gt; strTemp = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">        for (String str : depsList) {</span>
+<span class="fc" id="L81">            strArr = str.split(&quot;/&quot;);</span>
+<span class="fc" id="L82">            strTemp.clear();</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">            for (int i = 0; i &lt; strArr.length; i++) {</span>
+<span class="fc" id="L84">                strTemp.add(strArr[i]);</span>
+<span class="fc" id="L85">                tmpOrg = new Departments.Org(List.copyOf(strTemp));</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">                if (!checkIfOrgAlreadyExist(result, tmpOrg)) {</span>
+<span class="fc" id="L87">                    result.add(tmpOrg);</span>
+                }
+            }
+<span class="fc" id="L90">        }</span>
+<span class="fc" id="L91">        return result;</span>
+    }
+
+    /**
+     *
+     * @param result список объектов Org
+     * @param o объект Org
+     * @return true если объект уже в списке
+     */
+    private  boolean checkIfOrgAlreadyExist(List&lt;Departments.Org&gt; result, Org o) {
+<span class="fc" id="L101">        boolean res = false;</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">        for (Org org : result) {</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">            if (o.equals(org)) {</span>
+<span class="fc" id="L104">                res = true;</span>
+            }
+<span class="fc" id="L106">        }</span>
+<span class="fc" id="L107">        return res;</span>
+    }
+
+    /**
+     * Сортировка по возрастанию через Comparable CompareTo
+     */
+    public List&lt;Org&gt; sortAsc(List&lt;Org&gt; orgs) {
+<span class="fc" id="L114">        Collections.sort(orgs);</span>
+<span class="fc" id="L115">        return orgs;</span>
+    }
+
+    /**
+     * Сортировка по убыванию через comparator
+     */
+    public List&lt;Org&gt; sortDesc(List&lt;Org&gt; orgs) {
+<span class="fc" id="L122">        orgs.sort(</span>
+<span class="fc" id="L123">                new Comparator&lt;Org&gt;() {</span>
+                    @Override
+                    public int compare(Org o1, Org o2) {
+<span class="fc" id="L126">                        int result = 0;</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">                        int size = (o1.deps.size() &gt; o2.deps.size()) ? o2.deps.size() : o1.deps.size();</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">                        for (int i = 0; i &lt; size; i++) {</span>
+<span class="fc" id="L129">                            result = o1.deps.get(i).compareTo(o2.deps.get(i));</span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">                            if (result != 0) {</span>
+<span class="fc" id="L131">                                break;</span>
+                            }
+                        }
+<span class="fc" id="L134">                        return result * -1;</span>
+
+                    }
+                }
+         );
+<span class="fc" id="L139">        return orgs;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

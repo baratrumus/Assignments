@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Logic.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">assignments_for_test</a> &gt; <a href="index.source.html" class="el_package">crosszerogame</a> &gt; <span class="el_source">Logic.java</span></div><h1>Logic.java</h1><pre class="source lang-java linenums">package crosszerogame;
+
+import java.util.Random;
+
+/**
+ * Crosses - Zeros Game
+ *  *
+ *  * @author Ivannikov Ilya (voldores@mail.ru)
+ *  * @version $Id$
+ *  * @since 0.1
+ */
+
+<span class="fc" id="L13">public class Logic {</span>
+
+    public String computerMove(String[][] moveTable) {
+        String compMove;
+<span class="nc" id="L17">        Random r = new Random();</span>
+<span class="nc" id="L18">        int x = r.nextInt(moveTable.length);</span>
+<span class="nc" id="L19">        int y = r.nextInt(moveTable.length);</span>
+<span class="nc bnc" id="L20" title="All 2 branches missed.">        while (!(moveTable[x][y].isBlank())) {</span>
+<span class="nc" id="L21">            x = r.nextInt(moveTable.length);</span>
+<span class="nc" id="L22">            y = r.nextInt(moveTable.length);</span>
+        }
+<span class="nc" id="L24">        compMove = x + &quot;,&quot; + y;</span>
+<span class="nc" id="L25">        return compMove;</span>
+    }
+
+    /**
+     *
+     * @param moveTable table of moves
+     * @param crossZero cross or zero
+     * winAmount The quantity of crosses or zeros in line, need to win(depends on size of field)
+     * @return
+     */
+    public boolean isWin(String[][] moveTable, String crossZero, int lastMoveX, int lastMoveY) {
+<span class="fc" id="L36">        int winAmount =  winAmount(moveTable.length);</span>
+<span class="fc" id="L37">        boolean ret = false;</span>
+<span class="fc" id="L38">        int realAmountHor = 0;</span>
+<span class="fc" id="L39">        int realAmountVert = 0;</span>
+<span class="fc" id="L40">        int realAmountDiagLeft = 0;</span>
+<span class="fc" id="L41">        int realAmountDiagRight = 0;</span>
+<span class="fc" id="L42">        boolean gotShiftDiagLeft = true;</span>
+<span class="fc" id="L43">        boolean gotShiftDiagRight = true;</span>
+<span class="fc" id="L44">        int[] leftDiagBegin = getDiagBegin(moveTable, lastMoveX, lastMoveY, -1, -1);</span>
+<span class="fc" id="L45">        int leftDiagBeginX = leftDiagBegin[0];</span>
+<span class="fc" id="L46">        int leftDiagBeginY = leftDiagBegin[1];</span>
+<span class="fc" id="L47">        int[] rightDiagBegin = getDiagBegin(moveTable, lastMoveX, lastMoveY, -1, 1);</span>
+<span class="fc" id="L48">        int rightDiagBeginX = rightDiagBegin[0];</span>
+<span class="fc" id="L49">        int rightDiagBeginY = rightDiagBegin[1];</span>
+
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        for (int i = 0; i &lt; moveTable.length; i++) {</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">            if (crossZero.equals(moveTable[i][lastMoveY])) { //check hor</span>
+<span class="fc" id="L53">                realAmountHor++;</span>
+            } else {
+<span class="fc" id="L55">                realAmountHor = 0;</span>
+            }
+<span class="fc bfc" id="L57" title="All 2 branches covered.">            if (realAmountHor == winAmount) {</span>
+<span class="fc" id="L58">                ret = true;</span>
+<span class="fc" id="L59">                break;</span>
+            }
+
+<span class="fc bfc" id="L62" title="All 2 branches covered.">            if (crossZero.equals(moveTable[lastMoveX][i])) { // check vert</span>
+<span class="fc" id="L63">                realAmountVert++;</span>
+            } else {
+<span class="fc" id="L65">                realAmountVert = 0;</span>
+            }
+<span class="fc bfc" id="L67" title="All 2 branches covered.">            if (realAmountVert == winAmount) {</span>
+<span class="fc" id="L68">                ret = true;</span>
+<span class="fc" id="L69">                break;</span>
+            }
+
+<span class="pc bpc" id="L72" title="1 of 4 branches missed.">            if (crossZero.equals(moveTable[leftDiagBeginX][leftDiagBeginY]) &amp;&amp; gotShiftDiagLeft) { //check diag from left up to right down</span>
+<span class="fc" id="L73">                realAmountDiagLeft++;</span>
+            } else {
+<span class="fc" id="L75">                realAmountDiagLeft = 0;</span>
+            }
+<span class="pc bpc" id="L77" title="1 of 4 branches missed.">            if (!(leftDiagBeginX == (moveTable.length - 1) || (leftDiagBeginY == (moveTable.length - 1)))) {</span>
+<span class="fc" id="L78">                leftDiagBeginX++;</span>
+<span class="fc" id="L79">                leftDiagBeginY++;</span>
+<span class="fc" id="L80">                gotShiftDiagLeft = true;</span>
+            } else {
+<span class="fc" id="L82">                gotShiftDiagLeft = false;</span>
+            }
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">            if (realAmountDiagLeft == winAmount) {</span>
+<span class="nc" id="L85">                ret = true;</span>
+<span class="nc" id="L86">                break;</span>
+            }
+
+<span class="pc bpc" id="L89" title="1 of 4 branches missed.">            if (crossZero.equals(moveTable[rightDiagBeginX][rightDiagBeginY]) &amp;&amp; gotShiftDiagRight) { //check diag from left down to right up</span>
+<span class="fc" id="L90">                realAmountDiagRight++;</span>
+            } else {
+<span class="fc" id="L92">                realAmountDiagRight = 0;</span>
+            }
+<span class="fc bfc" id="L94" title="All 4 branches covered.">            if (!(rightDiagBeginX == (moveTable.length - 1) || (rightDiagBeginY == 0))) {</span>
+<span class="fc" id="L95">                rightDiagBeginX++;</span>
+<span class="fc" id="L96">                rightDiagBeginY--;</span>
+<span class="fc" id="L97">                gotShiftDiagRight = true;</span>
+            } else {
+<span class="fc" id="L99">                gotShiftDiagRight = false;</span>
+            }
+<span class="fc bfc" id="L101" title="All 2 branches covered.">            if (realAmountDiagRight == winAmount) {</span>
+<span class="fc" id="L102">                ret = true;</span>
+<span class="fc" id="L103">                break;</span>
+            }
+        }
+<span class="fc" id="L106">        return ret;</span>
+    }
+
+    /**
+     * @return begining point of check win line
+     */
+    private int[] getDiagBegin(String[][] moveTable, int lastMoveX, int lastMoveY, int deltaX, int deltaY) {
+<span class="fc bfc" id="L113" title="All 2 branches covered.">        if (deltaY == 1) {</span>
+<span class="fc bfc" id="L114" title="All 4 branches covered.">            while (!(lastMoveX == 0 || lastMoveY == (moveTable.length - 1))) { //go left down</span>
+<span class="fc" id="L115">                lastMoveX += deltaX;</span>
+<span class="fc" id="L116">                lastMoveY += deltaY;</span>
+            }
+        } else {
+<span class="pc bpc" id="L119" title="1 of 4 branches missed.">            while (!(lastMoveX == 0 || lastMoveY == 0)) {  //go left up</span>
+<span class="fc" id="L120">                lastMoveX += deltaX;</span>
+<span class="fc" id="L121">                lastMoveY += deltaY;</span>
+            }
+        }
+<span class="fc" id="L124">        return new int[]{lastMoveX, lastMoveY};</span>
+    }
+
+    /**
+     * @param fieldSize
+     * @return winAmount The quantity of crosses or zeros in line, need to win(depends on size of field)
+     */
+    private int winAmount(int fieldSize) {
+        int ret;
+<span class="pc bpc" id="L133" title="1 of 2 branches missed.">        if (fieldSize &lt; 5) {</span>
+<span class="fc" id="L134">            ret = fieldSize;</span>
+        } else {
+<span class="nc" id="L136">            ret = 5;</span>
+        }
+<span class="fc" id="L138">        return ret;</span>
+    }
+
+    public boolean checkIfBizy(String[][] moveTable, int x, int y) {
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">       return (moveTable[x][y].isBlank()) ? false : true;</span>
+    }
+
+
+    public String[] getCompMove(String[][] moveTable) {
+<span class="nc" id="L147">        String[] compMove = computerMove(moveTable).split(&quot;,&quot;);</span>
+<span class="nc" id="L148">        int compMoveX = Integer.parseInt(compMove[0]);</span>
+<span class="nc" id="L149">        int compMoveY = Integer.parseInt(compMove[1]);</span>
+
+<span class="nc bnc" id="L151" title="All 2 branches missed.">        while (checkIfBizy(moveTable, compMoveX, compMoveY)) {</span>
+<span class="nc" id="L152">            compMove = computerMove(moveTable).split(&quot;,&quot;);</span>
+<span class="nc" id="L153">            compMoveX = Integer.parseInt(compMove[0]);</span>
+<span class="nc" id="L154">            compMoveY = Integer.parseInt(compMove[1]);</span>
+        }
+<span class="nc" id="L156">        return compMove;</span>
+    }
+
+
+    public boolean fieldIsFull(String[][] moveTable) {
+<span class="fc" id="L161">        boolean ret = true;</span>
+<span class="fc bfc" id="L162" title="All 2 branches covered.">        for (int vert = 0; vert &lt; moveTable.length; vert++) {</span>
+<span class="fc bfc" id="L163" title="All 2 branches covered.">            for (int hor = 0; hor &lt; moveTable.length; hor++) {</span>
+<span class="pc bpc" id="L164" title="1 of 2 branches missed.">                if (moveTable[hor][vert].isBlank()) {</span>
+<span class="nc" id="L165">                    ret = false;</span>
+                }
+            }
+        }
+<span class="fc" id="L169">        return ret;</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

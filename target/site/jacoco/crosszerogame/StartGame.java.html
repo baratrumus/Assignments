@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StartGame.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">assignments_for_test</a> &gt; <a href="index.source.html" class="el_package">crosszerogame</a> &gt; <span class="el_source">StartGame.java</span></div><h1>StartGame.java</h1><pre class="source lang-java linenums">package crosszerogame;
+
+/**
+ *
+ *  * Crosses - Zeros Game
+ *  *
+ *  * @author Ivannikov Ilya (voldores@mail.ru)
+ *  * @version $Id$
+ *  * @since 0.1
+ *
+ *
+ Создание игры крестики нолики.
+ Вывод данных в консоль в псевдографики.
+ Пользователь начинает игру. Вводи координаты точки.
+ Предусмотреть, чтобы компьютер мог начать игру.
+ Предусмотреть увеличение поля. По умолчанию используется поле 3 на 3.
+ Предусмотреть усложнение логики игры. Выигрывает тот кто соберет 5 подряд
+ Пользователь ходит Х, компьютер 0
+ */
+
+public class StartGame {
+<span class="nc" id="L22">    private static final String LN = System.lineSeparator();</span>
+    public static final String ANSI_RED = &quot;\u001B[31m&quot;;
+<span class="nc" id="L24">    private Boolean exit = false;</span>
+<span class="nc" id="L25">    private Boolean switchMove = true;</span>
+    private String userBegins;
+    private String gameType;
+    private int fieldSize;
+    private DrawField field;
+    private Logic logic;
+    private ConsoleInput input;
+    private String[][] moveTable;
+
+<span class="nc" id="L34">    public StartGame() {</span>
+<span class="nc" id="L35">        this.field = new DrawField();</span>
+<span class="nc" id="L36">        this.logic = new Logic();</span>
+<span class="nc" id="L37">        this.input =  new ConsoleInput();</span>
+<span class="nc" id="L38">    }</span>
+
+    public void init() {
+<span class="nc" id="L41">        this.gameType = input.ask(&quot;Choose game type, comp vs comp press \&quot;c\&quot;, user vs comp press \&quot;u\&quot;:&quot;);</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        if (&quot;u&quot;.equals(gameType)) {</span>
+<span class="nc" id="L43">            this.userBegins = input.ask(</span>
+                    &quot;Choose who begins, for user's begin press \&quot;1\&quot;, for computer's begin press \&quot;0\&quot;:&quot;);
+        }
+<span class="nc" id="L46">        this.fieldSize = Integer.parseInt(input.ask(&quot;If field size is more than 5, win always is 5 in line. &quot;</span>
+                + &quot;Input field size:&quot;));
+<span class="nc" id="L48">        this.moveTable = new String[fieldSize][fieldSize];</span>
+<span class="nc" id="L49">        field.draw(fieldSize, moveTable);</span>
+        do {
+<span class="nc bnc" id="L51" title="All 2 branches missed.">            if (&quot;u&quot;.equals(gameType)) {</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">                if (&quot;1&quot;.equals(userBegins)) {</span>
+<span class="nc" id="L53">                    makeUserMove();</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">                } else if (!logic.fieldIsFull(moveTable)) {</span>
+<span class="nc" id="L55">                    makeCompMove(&quot;0&quot;);</span>
+<span class="nc" id="L56">                    userBegins = &quot;1&quot;;</span>
+                }
+<span class="nc bnc" id="L58" title="All 2 branches missed.">            } else  if (&quot;c&quot;.equals(gameType)) {</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">                if (switchMove) {</span>
+<span class="nc" id="L60">                    makeCompMove(&quot;X&quot;);</span>
+<span class="nc" id="L61">                    switchMove = false;</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">                } else if (!logic.fieldIsFull(moveTable)) {</span>
+<span class="nc" id="L63">                    makeCompMove(&quot;0&quot;);</span>
+<span class="nc" id="L64">                    switchMove = true;</span>
+                }
+            }
+<span class="nc" id="L67">            field.draw(fieldSize, moveTable);</span>
+
+<span class="nc bnc" id="L69" title="All 2 branches missed.">            if (logic.fieldIsFull(moveTable)) {</span>
+<span class="nc" id="L70">                this.exit = true;</span>
+<span class="nc" id="L71">                System.out.println(LN + &quot;Field is full. Nobody wins&quot;);</span>
+            }
+<span class="nc bnc" id="L73" title="All 2 branches missed.">        } while (!this.exit);</span>
+<span class="nc" id="L74">    }</span>
+
+
+    private void makeCompMove(String sign) {
+<span class="nc" id="L78">        String[] compMove = logic.getCompMove(moveTable);</span>
+<span class="nc" id="L79">        int compMoveX = Integer.parseInt(compMove[0]);</span>
+<span class="nc" id="L80">        int compMoveY = Integer.parseInt(compMove[1]);</span>
+
+<span class="nc" id="L82">        moveTable[compMoveX][compMoveY] = sign;</span>
+<span class="nc" id="L83">        System.out.println(String.format(&quot;Computer \&quot;%s\&quot; moves [%d,%d]&quot; + LN, sign,</span>
+<span class="nc" id="L84">                compMoveX + 1, compMoveY + 1));</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        if (logic.isWin(moveTable, sign, compMoveX, compMoveY)) {   //computer win check</span>
+<span class="nc" id="L86">            this.exit = true;</span>
+<span class="nc" id="L87">            System.out.println(String.format(ANSI_RED + &quot;Computer \&quot;%s\&quot; wins&quot; + ANSI_RED, sign));</span>
+        }
+<span class="nc" id="L89">    }</span>
+
+
+    private void makeUserMove() {
+<span class="nc" id="L93">        String inp = input.ask(&quot;Input coordinates of your move, &quot;</span>
+                + &quot;two comma-separated didgits (x - first, y - second), \&quot;q\&quot; to quit:&quot;);
+<span class="nc bnc" id="L95" title="All 2 branches missed.">        if (&quot;q&quot;.equalsIgnoreCase(inp)) {</span>
+<span class="nc" id="L96">            this.exit = true;</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">        } else if (!inp.isBlank()) {</span>
+<span class="nc" id="L98">            String[] userMove = getUserMove(moveTable, inp);</span>
+<span class="nc" id="L99">            int userMoveX = Integer.parseInt(userMove[0]) - 1;</span>
+<span class="nc" id="L100">            int userMoveY = Integer.parseInt(userMove[1]) - 1;</span>
+<span class="nc" id="L101">            moveTable[userMoveX][userMoveY] = &quot;X&quot;;</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">            if (logic.isWin(moveTable, &quot;X&quot;, userMoveX, userMoveY)) {   //user win check</span>
+<span class="nc" id="L103">                this.exit = true;</span>
+<span class="nc" id="L104">                System.out.println(ANSI_RED + &quot;User wins&quot; + ANSI_RED);</span>
+            }
+        }
+<span class="nc" id="L107">        userBegins = &quot;0&quot;;</span>
+<span class="nc" id="L108">    }</span>
+
+    /**
+     * check if cell is bizy
+     */
+    private String[] getUserMove(String[][] moveTable, String inp) {
+<span class="nc" id="L114">        String[] userMove = inp.split(&quot;,[ ]*&quot;);</span>
+<span class="nc" id="L115">        int userMoveX = Integer.parseInt(userMove[0]);</span>
+<span class="nc" id="L116">        int userMoveY = Integer.parseInt(userMove[1]);</span>
+
+<span class="nc bnc" id="L118" title="All 2 branches missed.">        while (logic.checkIfBizy(moveTable, userMoveX - 1, userMoveY - 1)) {</span>
+<span class="nc" id="L119">            inp = input.ask(&quot;This cell is bizy, input another coordinates:&quot;);</span>
+<span class="nc" id="L120">            userMove = inp.split(&quot;,[ ]*&quot;);</span>
+<span class="nc" id="L121">            userMoveX = Integer.parseInt(userMove[0]);</span>
+<span class="nc" id="L122">            userMoveY = Integer.parseInt(userMove[1]);</span>
+        }
+<span class="nc" id="L124">        return userMove;</span>
+    }
+
+    public static void main(String[] args) {
+<span class="nc" id="L128">        StartGame sg = new StartGame();</span>
+<span class="nc" id="L129">        sg.init();</span>
+<span class="nc" id="L130">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

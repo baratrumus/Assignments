@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="6.11.2">
+<file name="D:\JavaProgramms\job4j\assignments_for_test\src\main\java\crosszerogame\ConsoleInput.java">
+</file>
+<file name="D:\JavaProgramms\job4j\assignments_for_test\src\main\java\crosszerogame\DrawField.java">
+</file>
+<file name="D:\JavaProgramms\job4j\assignments_for_test\src\main\java\crosszerogame\Logic.java">
+</file>
+<file name="D:\JavaProgramms\job4j\assignments_for_test\src\main\java\crosszerogame\StartGame.java">
+</file>
+<file name="D:\JavaProgramms\job4j\assignments_for_test\src\main\java\deadlock\GarantedDeadlock.java">
+</file>
+<file name="D:\JavaProgramms\job4j\assignments_for_test\src\main\java\departments\Departments.java">
+</file>
+<file name="D:\JavaProgramms\job4j\assignments_for_test\src\main\java\kofemachine\KofeMachine.java">
+</file>
+<file name="D:\JavaProgramms\job4j\assignments_for_test\src\main\java\kofemachine\KofeMachineNoList.java">
+</file>
+<file name="D:\JavaProgramms\job4j\assignments_for_test\src\main\java\lift\ConsoleInput.java">
+</file>
+<file name="D:\JavaProgramms\job4j\assignments_for_test\src\main\java\lift\Lift.java">
+</file>
+<file name="D:\JavaProgramms\job4j\assignments_for_test\src\main\java\lift\MoveLiftToStage.java">
+</file>
+<file name="D:\JavaProgramms\job4j\assignments_for_test\src\main\java\links\Links.java">
+</file>
+<file name="D:\JavaProgramms\job4j\assignments_for_test\src\main\java\links\NetRelations.java">
+</file>
+<file name="D:\JavaProgramms\job4j\assignments_for_test\src\main\java\links\NetRelationsMod.java">
+</file>
+<file name="D:\JavaProgramms\job4j\assignments_for_test\src\main\java\videocamera\ver1\Camera.java">
+</file>
+<file name="D:\JavaProgramms\job4j\assignments_for_test\src\main\java\videocamera\ver2\Camera.java">
+</file>
+<file name="D:\JavaProgramms\job4j\assignments_for_test\src\test\java\crosszerogame\LogicTest.java">
+</file>
+<file name="D:\JavaProgramms\job4j\assignments_for_test\src\test\java\departments\DepartmentsTest.java">
+</file>
+<file name="D:\JavaProgramms\job4j\assignments_for_test\src\test\java\kofemachine\KofeMachineTest.java">
+</file>
+<file name="D:\JavaProgramms\job4j\assignments_for_test\src\test\java\links\LinksTest.java">
+</file>
+<file name="D:\JavaProgramms\job4j\assignments_for_test\src\test\java\videocamera\ver1\CameraTest.java">
+</file>
+</checkstyle>

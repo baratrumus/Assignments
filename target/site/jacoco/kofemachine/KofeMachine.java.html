@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>KofeMachine.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">assignments_for_test</a> &gt; <a href="index.source.html" class="el_package">kofemachine</a> &gt; <span class="el_source">KofeMachine.java</span></div><h1>KofeMachine.java</h1><pre class="source lang-java linenums">package kofemachine;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * Надо реализовать метод выдачи сдачи для автомата.
+ * int[] changes(int value, int price)
+ * value = купюра. 50 100 и тд.
+ * price = цена кофе
+ * в автомате монеты наминалом 1 2 5 10
+ * Пример. Мы засунули 50 рублей выбрали кофе за 35. Сдачу автомат должен дать 15 рублей
+ * Алгоритм должен вернуть наименьшее количество монет.
+ * Метод вернет массив {10, 5} = 15 рублей
+ */
+public class KofeMachine {
+    private final int value;
+    private final int price;
+
+<span class="fc" id="L21">    KofeMachine(int value, int price) {</span>
+<span class="fc" id="L22">        this.value = value;</span>
+<span class="fc" id="L23">        this.price = price;</span>
+<span class="fc" id="L24">    }</span>
+
+    public Integer[] changes() {
+<span class="fc" id="L27">        List&lt;Integer&gt; rt = new ArrayList&lt;Integer&gt;();</span>
+<span class="fc" id="L28">        int[] monets = new int[]{10, 5, 2, 1};</span>
+<span class="fc" id="L29">        int rest = this.value - this.price;</span>
+<span class="fc bfc" id="L30" title="All 2 branches covered.">        for (int mon: monets) {</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">            while (rest &gt;= mon) {</span>
+<span class="fc" id="L32">                rest -= mon;</span>
+<span class="fc" id="L33">                rt.add(mon);</span>
+            }
+        }
+<span class="fc" id="L36">        return rt.toArray(new Integer[rt.size()]);</span>
+    }
+
+    public static void main(String[] args) {
+<span class="nc" id="L40">        KofeMachine km = new KofeMachine(50, 33);</span>
+<span class="nc" id="L41">        System.out.println(Arrays.toString(km.changes()));</span>
+<span class="nc" id="L42">    }</span>
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>
